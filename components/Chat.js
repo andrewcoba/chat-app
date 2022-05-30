@@ -2,17 +2,13 @@ import React from "react";
 import { GiftedChat, Bubble } from "react-native-gifted-chat";
 
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import firebase from 'firebase'
+import 'firebase/firestore'
+// import { initializeApp } from "firebase/app";
+// import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
-const firebase = require('firebase');
-require('firebase/firestore');
 
 import {
   View,
@@ -22,41 +18,57 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAy-h3k9l1PCfqnzLe3IluT5F9Lz8qkQGQ",
+  authDomain: "chat-app-72494.firebaseapp.com",
+  projectId: "chat-app-72494",
+  storageBucket: "chat-app-72494.appspot.com",
+  messagingSenderId: "1044212206610",
+  appId: "1:1044212206610:web:d42b9d42fd2155ebf79ccb",
+  measurementId: "G-NL636T5LWK"
+};
+
+
 export default class Chat extends React.Component {
   constructor() {
     super();
     this.state = {
       messages: [],
+      user: {
+        _id: "",
+        name: "",
+        avatar: "",
+      },
     };
-  }
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyAy-h3k9l1PCfqnzLe3IluT5F9Lz8qkQGQ",
-    authDomain: "chat-app-72494.firebaseapp.com",
-    projectId: "chat-app-72494",
-    storageBucket: "chat-app-72494.appspot.com",
-    messagingSenderId: "1044212206610",
-    appId: "1:1044212206610:web:d42b9d42fd2155ebf79ccb",
-    measurementId: "G-NL636T5LWK"
-  };
-
-  if (!firebase.app.length){
+    if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
-  }
+    }
 
-  this.referenceChatMessages = firebase.firestore().collection('messages');
+    this.referenceChatMessages = firebase.firestore().collection("messages");
+  }
 
   componentDidMount() {
+
+    let name = this.props.route.params.name;
+    this.props.navigation.setOptions({ title: name });
+
     this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => {
       if (!user) {
          firebase.auth().signInAnonymously();
       }
+
       this.setState({
         uid: user.uid,
         messages: [],
+        user: {
+          _id: user.uid,
+          name: name,
+        },
     });
+
     this.unsubcribe = this.referenceChatMessages
       .orderBy('createdAt', 'desc')
       .onSnapshot(this.onCollectionUpdate);
@@ -76,25 +88,30 @@ export default class Chat extends React.Component {
     querySnapshot.forEach((doc) => {
       // get the QueryDocumentSnapshot's data
       let data = doc.data();
+
       messages.push({
         _id: data._id,
         text: data.text,
-        createdAt: data.createAt.toDate(),
-        user: data.user,
+        createdAt: data.createdAt.toDate(),
+        user: {
+          _id: data.user._id,
+          name: data.user.name,
+          avatar: data.user.avatar,
+        },
       });
     });
     this.setState({
       messages: messages
     });
-    this.saveMessages();
   };
 
   addMessages() {
     //adds new message to the collection
     this.referenceChatMessages.add({
       uid: this.state.uid,
-      createAt: message.createAt,
-      text: message.createAt,
+       _id: message._id,
+      createAt: message.createdAt,
+      text:  message.text || '',
       user: this.state.user,
     });
   }
@@ -104,7 +121,6 @@ export default class Chat extends React.Component {
       messages: GiftedChat.append(previousState.messages, messages),
     }), () => {
       this.addMessages();
-      this.saveMessages();
     });
   }
 
@@ -121,8 +137,6 @@ export default class Chat extends React.Component {
     );
   }
   render() {
-    let name = this.props.route.params.name;
-    this.props.navigation.setOptions({ title: name });
     return (
       <View style={{ flex: 1 }}>
         <GiftedChat
