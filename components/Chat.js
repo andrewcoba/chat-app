@@ -106,6 +106,7 @@ export default class Chat extends React.Component {
   };
 
   addMessages() {
+    const message = this.state.messages[0];
     //adds new message to the collection
     this.referenceChatMessages.add({
       uid: this.state.uid,
