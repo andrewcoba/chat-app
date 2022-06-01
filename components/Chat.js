@@ -1,5 +1,5 @@
 import React from "react";
-import { GiftedChat, Bubble } from "react-native-gifted-chat";
+import { GiftedChat, Bubble, InputToolbar } from "react-native-gifted-chat";
 
 // Import the functions you need from the SDKs you need
 import firebase from 'firebase'
@@ -8,6 +8,8 @@ import 'firebase/firestore'
 // import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import NetInfo from '@react-native-community/netinfo'
 
 
 import {
@@ -41,13 +43,16 @@ export default class Chat extends React.Component {
         name: "",
         avatar: "",
       },
+      isConnected: false,
+      image: null,
+      location: null,
     };
 
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
 
-    this.referenceChatMessages = firebase.firestore().collection("messages");
+    this.referenceChatMessages = firebase.firestore().collection('messages');
   }
 
   // get messages from AsyncStorage
@@ -213,10 +218,12 @@ async deleteMessages() {
       <View style={{ flex: 1 }}>
         <GiftedChat
           renderBubble={this.renderBubble.bind(this)}
+          renderInputToolbar={this.renderInputToolbar.bind(this)}
           messages={this.state.messages}
           onSend={(messages) => this.onSend(messages)}
           user={{
-            _id: 1,
+            _id: this.state.user._id,
+            name: this.state.name,
           }}
         />
         {Platform.OS === "android" ? (
