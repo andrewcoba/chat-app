@@ -49,7 +49,7 @@ export default class Start extends React.Component {
         <View style={styles.colorBox}>
           <Text style={styles.chooseColor}>
             {''}
-            Choose background color...{''}
+            Choose background color{''}
           </Text>
         </View>
 
@@ -96,6 +96,8 @@ export default class Start extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignContent: 'space-between',
+
   },
 
   backgroundImage: {
@@ -114,16 +116,20 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 45,
-    fontweight: '600',
+    fontWeight: '100',
     color: '#ffffff',
+    fontFamily: 'Verdana',
   },
 
   box1: {
     backgroundColor: 'white',
-    height: '45%',
+    height: '40%',
     width: '85%',
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 20,
+    marginBottom: '20%',
+
   },
 
   inputBox: {
@@ -146,7 +152,7 @@ const styles = StyleSheet.create({
   input: {
     fontSize: 15,
     fontWeight: '300',
-    color: '757083',
+    color: '#757083',
     opacity: 0.5,
   },
 
@@ -157,10 +163,11 @@ const styles = StyleSheet.create({
   },
 
   chooseColor: {
-    fontSize: 15,
-    fontWeight: '300',
-    color: '#757083',
-    opacity: 100,
+    fontSize: 20,
+    fontWeight: '400',
+    marginTop: 20,
+    marginLeft: 20,
+    textAlign: 'center'
   },
 
   colorArray: {
@@ -174,6 +181,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
+    marginTop: 20,
   },
 
   color2: {
@@ -181,13 +189,16 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
+    marginTop: 30,
   },
+
 
   color3: {
     backgroundColor: '#5d5d5d',
     width: 50,
     height: 50,
     borderRadius: 25,
+    marginTop: 30,
   },
 
   color4: {
@@ -195,6 +206,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
+    marginTop: 30,
   },
 
   color5: {
@@ -202,15 +214,17 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
+    marginTop: 20,
   },
 
   button: {
-    width: '85%',
-    height: 70,
+    width: '50%',
+    height: 50,
     borderRadius: 8,
     backgroundColor: '#757083',
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 30,
   },
 
   buttonText: {
