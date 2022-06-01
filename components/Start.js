@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
 
   buttonText: {
     color: '#ffffff',
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '600',
   },
 });
