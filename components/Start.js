@@ -1,5 +1,16 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet, Pressable, TouchableOpacity, TextInput, ImageBackground } from 'react-native';
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  Pressable,
+  TouchableOpacity,
+  TextInput,
+  ImageBackground,
+  Image,
+  KeyboardAvoidingView
+} from 'react-native';
 
 import BackgroundImage from '../assets/BackgroundImage.png';
 
@@ -88,11 +99,14 @@ export default class Start extends React.Component {
           </Pressable>
         </View>
       </ImageBackground>
+      { Platform.OS === 'android' ? <KeyboardAvoidingView behavior='height' /> : null}
+      { Platform.OS === 'ios' ? <KeyboardAvoidingView behavior='height' /> : null}
       </View>
-    );
+    )
   }
 }
 
+// styles the app
 const styles = StyleSheet.create({
   container: {
     flex: 1,
